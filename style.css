@@ -1,0 +1,13 @@
+@import "node_modules/bulma/css/bulma.css"; /*Import Bulma*/
+@import "node_modules/mathquill/build/mathquill.css"; /*Import MathQuill*/
+
+
+
+div{
+  padding: 50px;
+  margin: auto;
+}
+
+.box{
+  margin-top: 25px;
+}
