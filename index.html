@@ -10,8 +10,8 @@
     <script src="node_modules/mathquill/build/mathquill.js"></script>
 
     <script src="node_modules/chart.js/dist/chart.umd.js"></script> <!-- Initialize Chart.js -->
-    
-    <script src="node_modules/evaluatex/dist/evaluatex.js"></script> <!--Initialize Evaluatex.js -->
+
+    <script src="node_modules/evaluatex/dist/evaluatex.min.js"></script> <!--Initialize Evaluatex.js -->
 
     <title>MHS Project</title>
 
@@ -40,8 +40,8 @@
           var answerMathField = MQ.MathField(answerSpan, {
             handlers: {
               edit: function() {
-                var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
-                visualize(enteredMath)
+                var func = answerMathField.latex(); // Get entered math in LaTeX format
+                visualize(func) //VISUALIZE!
               }
             }
           });
@@ -54,12 +54,13 @@
         <script>
           const ctx = document.getElementById('myChart');
 
-          function calculate(func) {
-            return evaluatex(func)
+          function calculate(func) { //Nice little compact function because no big indent!
+            result = evaluatex(func); //TODO: MATHQUILL OUTPUTS SINGLE SLASH COMMANDS WHEN THERE SHOULD BE TWO ARGHHH (╯°□°）╯︵ ┻━┻
+            return result();
           } 
 
-          function visualize(func) {
-            console.log("calculating...");
+          function visualize(func) { //self explanatory (•_•)
+            console.log(func);
             console.log(calculate(func))
             new Chart(ctx, {
               type: 'line',
