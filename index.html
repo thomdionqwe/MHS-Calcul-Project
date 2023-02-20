@@ -62,6 +62,7 @@
                   datasets: [{
                     label: 'Y',
                     //data: [1, 2, 4, 7, 9, 10, 10, 9, 7, 4, 2, 1],
+                    
                   }]
                 },
                 options: {
@@ -99,6 +100,7 @@
               graphChart.data.datasets = [{
                     label: 'Y',
                     data: result,
+                    tension: 0.75
                   }];
               console.log("values set, updating...");
               graphChart.update();
