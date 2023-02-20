@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "bulma": "^0.9.4",
-    "chart.js": "^4.2.1",
-    "evaluatex": "^2.2.0",
+    "function-plot": "^1.23.2",
+    "latex-to-js": "^1.0.0",
     "mathquill": "^0.10.1-a"
   }
 }

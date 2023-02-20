@@ -8,17 +8,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> <!-- Initialize MathQuill -->
     <script src="node_modules/mathquill/build/mathquill.js"></script>
-
-    <script src="node_modules/chart.js/dist/chart.umd.js"></script> <!-- Initialize Chart.js -->
-
-    <script src="node_modules/evaluatex/dist/evaluatex.min.js"></script> <!--Initialize Evaluatex.js -->
+    <script>const MQ = MathQuill.getInterface(2);</script>
 
     <title>MHS Project</title>
-
-    <script>
-      var MQ = MathQuill.getInterface(2);
-    </script>
-
+    
   </head>
 
   <body>
@@ -48,62 +41,8 @@
         <h1>Function Visualization</h1>
           <canvas id="myChart"></canvas>
           <script>
-            var graphChart;
-            const graph = document.getElementById('myChart');
-
-            const calcPrecision = 1 //Function increment
-            const windowX = 100 //X window, centered at 0
-            const windowY = 50 //Y window, centers automatically
-            
-            var graphChart = new Chart(graph, { //Initialize chart
-                type: 'line',
-                data: {
-                  labels: windowXasArray(),
-                  datasets: [{
-                    label: 'Y',
-                    //data: [1, 2, 4, 7, 9, 10, 10, 9, 7, 4, 2, 1],
-                    
-                  }]
-                },
-                options: {
-                  pointStyle: false,
-                  scales: {
-                    y: {
-                      beginAtZero: true
-                    }
-                  }
-                }
-              });
-            
-            function windowXasArray() { //turn window of X into an array to be used for chart
-              let result = [];
-              for (let i = -windowX/2; i <= windowX/2; i = i + calcPrecision) {
-                result.push(i);
-              }
-              return result;
-            }
-            
-            function calculate(func) { //self explanatory
-              console.log(func);
-              let result = [];
-              let calculate = evaluatex(func); //I AM SUCH AN IDIOT OH MY GOD I SPENT A DAY ON THIS!!!!!!
-              for (let i = -windowX/2; i <= windowX/2; i = i + calcPrecision) {
-                result[i+windowX/2] = calculate({x: i, X: i});
-              }
-              return result;
-            } 
-            
             function visualize(func) { //self explanatory (•_•)
               console.log(func);
-              let result = calculate(func);
-              console.log("Calculated!");
-              graphChart.data.datasets = [{
-                    label: 'Y',
-                    data: result,
-                    tension: 0.75
-                  }];
-              console.log("values set, updating...");
-              graphChart.update();
             }
               
           </script>
