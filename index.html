@@ -17,10 +17,6 @@
 
     <script>
       var MQ = MathQuill.getInterface(2);
-
-      function refresh() {
-        console.log("Refreshing is not available") <!--TODO: Implement refreshing-->
-      }
     </script>
 
   </head>
@@ -28,7 +24,7 @@
   <body>
     <div class="content">
       <h1>A peculiar Function Plotter.</h1>
-      <p>Now that we know how Bulma works, let's get into it!</p>
+      <p>This function plotter hopefuly works! YIPPEE!</p>
       <button class="button is-primary" type="button" onclick="refresh()">Visualize</button>
 
       <div class="box">
@@ -48,40 +44,67 @@
         </script>
       </div>
 
-      <div class="box">
+      <div class="box" id="graphContainer">
         <h1>Function Visualization</h1>
-        <canvas id="myChart"></canvas>
-        <script>
-          const ctx = document.getElementById('myChart');
+          <canvas id="myChart"></canvas>
+          <script>
+            var graphChart;
+            const graph = document.getElementById('myChart');
 
-          function calculate(func) { //Nice little compact function because no big indent!
-            result = evaluatex(func); //TODO: MATHQUILL OUTPUTS SINGLE SLASH COMMANDS WHEN THERE SHOULD BE TWO ARGHHH (╯°□°）╯︵ ┻━┻
-            return result();
-          } 
-
-          function visualize(func) { //self explanatory (•_•)
-            console.log(func);
-            console.log(calculate(func))
-            new Chart(ctx, {
-              type: 'line',
-              data: {
-                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '10', '11', '12'],
-                datasets: [{
-                  label: 'Y',
-                  data: [1, 2, 4, 7, 9, 10, 10, 9, 7, 4, 2, 1],
-                }]
-              },
-              options: {
-                pointStyle: false,
-                scales: {
-                  y: {
-                    beginAtZero: true
+            const calcPrecision = 1 //Function increment
+            const windowX = 100 //X window, centered at 0
+            const windowY = 50 //Y window, centers automatically
+            
+            var graphChart = new Chart(graph, { //Initialize chart
+                type: 'line',
+                data: {
+                  labels: windowXasArray(),
+                  datasets: [{
+                    label: 'Y',
+                    //data: [1, 2, 4, 7, 9, 10, 10, 9, 7, 4, 2, 1],
+                  }]
+                },
+                options: {
+                  pointStyle: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
                   }
                 }
+              });
+            
+            function windowXasArray() { //turn window of X into an array to be used for chart
+              let result = [];
+              for (let i = -windowX/2; i <= windowX/2; i = i + calcPrecision) {
+                result.push(i);
               }
-            });
-          }
-        </script>
+              return result;
+            }
+            
+            function calculate(func) { //self explanatory
+              console.log(func);
+              let result = [];
+              let calculate = evaluatex(func); //I AM SUCH AN IDIOT OH MY GOD I SPENT A DAY ON THIS!!!!!!
+              for (let i = -windowX/2; i <= windowX/2; i = i + calcPrecision) {
+                result[i+windowX/2] = calculate({x: i, X: i});
+              }
+              return result;
+            } 
+            
+            function visualize(func) { //self explanatory (•_•)
+              console.log(func);
+              let result = calculate(func);
+              console.log("Calculated!");
+              graphChart.data.datasets = [{
+                    label: 'Y',
+                    data: result,
+                  }];
+              console.log("values set, updating...");
+              graphChart.update();
+            }
+              
+          </script>
       </div>
 
     </div>
