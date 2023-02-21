@@ -1,53 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css"> <!-- Initialize style + Import Bulma / MathQuill -->
+		<link rel="stylesheet" href="style.css"> <!-- Initialize style + Import Bulma / MathQuill -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> <!-- Initialize MathQuill -->
-    <script src="node_modules/mathquill/build/mathquill.js"></script>
-    <script>const MQ = MathQuill.getInterface(2);</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> <!-- Initialize MathQuill -->
+		<script src="node_modules/mathquill/build/mathquill.js"></script>
 
-    <title>MHS Project</title>
-    
-  </head>
+		<script src="src\latex-to-js.js"></script> <!-- Initialize latex-to-js -->
 
-  <body>
-    <div class="content">
-      <h1>A peculiar Function Plotter.</h1>
-      <p>This function plotter hopefuly works! YIPPEE!</p>
-      <button class="button is-primary" type="button" onclick="refresh()">Visualize</button>
+		<script src="node_modules\function-plot\dist\function-plot.js"></script> <!-- Initialize function-plot -->
 
-      <div class="box">
-        <h1>Formula</h1>
-        <p><span id="answer">y=</span></p>
-        <p id="output"></p>
-        <script>
-          var answerSpan = document.getElementById('answer');
-          var answerMathField = MQ.MathField(answerSpan, {
-            handlers: {
-              edit: function() {
-                var func = answerMathField.latex(); // Get entered math in LaTeX format
-                visualize(func) //VISUALIZE!
-              }
-            }
-          });
-        </script>
-      </div>
+		<script>const MQ = MathQuill.getInterface(2);</script>
 
-      <div class="box" id="graphContainer">
-        <h1>Function Visualization</h1>
-          <canvas id="myChart"></canvas>
-          <script>
-            function visualize(func) { //self explanatory (•_•)
-              console.log(func);
-            }
-              
-          </script>
-      </div>
+		<title>MHS Project</title>
 
-    </div>
-  </body>
+	</head>
+
+	<body>
+		<div class="content">
+			<h1>A peculiar Function Plotter.</h1>
+			<p>This function plotter hopefuly works! YIPPEE!</p>
+			<button class="button is-primary" type="button" onclick="refresh()">Visualize</button>
+
+			<div class="box">
+				<h1>Formula</h1>
+				<p><span id="answer">x</span></p>
+				<p id="output"></p>
+			</div>
+
+			<div class="box" id="graphContainer">
+				<h1>Function Visualization</h1>
+				<span id="graph" class="graph"></span>
+				<script>
+					const graphContainer = document.getElementById("graphContainer");
+					const graph = document.getElementById("graph");
+					var currentFunc;
+					addEventListener("resize", updateDimensions);
+					
+					var answerSpan = document.getElementById('answer');
+					var answerMathField = MQ.MathField(answerSpan, {
+						handlers: {
+							edit: function() {
+								let func = answerMathField.latex(); // Get entered math in LaTeX format
+								visualize(func) //VISUALIZE!
+							}
+						}
+					});
+					
+					function updateDimensions() { //Called when the window is resized. Is also called when the window is openned
+						functionPlot({
+							target: graph,
+							width: graphContainer.offsetWidth - 50,
+							height: (graphContainer.offsetWidth - 50) * 0.5625,
+							grid: true,
+							data: [{
+								fn: latex_to_js(answerMathField.latex()) //VERY USEFUL, THANK YOU!
+							}]
+						});
+						console.log("updated dimensions")
+					}
+					
+					function visualize(func) { //Takes LaTeX function and plots it to the graph
+						console.log(func);
+						currentFunc = func;
+						
+						functionPlot({
+							target: graph,
+							width: graphContainer.offsetWidth - 50,
+							height: (graphContainer.offsetWidth - 50) * 0.5625,
+							grid: true,
+							data: [{
+								fn: latex_to_js(func) //VERY USEFUL, THANK YOU!
+							}]
+						});
+					}
+					updateDimensions(); //Initialize graph
+				</script>
+			</div>
+
+		</div>
+	</body>
 </html>

@@ -5,8 +5,8 @@ Program made by Thomdionqwe (2023)
 
 ## Resources used:
 #### For plotting graphs:
-- Chart.js
-- Evaluatex.js
+- function-plot
+- latex-to-js
 
 #### For formulating:
 - MathQuill
