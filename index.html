@@ -5,6 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<link rel="stylesheet" href="style.css"> <!-- Initialize style + Import Bulma / MathQuill -->
+		
+		<script src="node_modules\mathjs/lib/browser/math.js"></script> <!-- Initialize Math.js -->
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> <!-- Initialize MathQuill -->
 		<script src="node_modules/mathquill/build/mathquill.js"></script>
@@ -37,7 +39,7 @@
 				<script>
 					const graphContainer = document.getElementById("graphContainer");
 					const graph = document.getElementById("graph");
-					var currentFunc;
+					var h = 0.001;
 					addEventListener("resize", updateDimensions);
 					
 					var answerSpan = document.getElementById('answer');
@@ -65,7 +67,8 @@
 					
 					function visualize(func) { //Takes LaTeX function and plots it to the graph
 						console.log(func);
-						currentFunc = func;
+						console.log(latex_to_js(func));
+						console.log(getTVI(func, 1));
 						
 						functionPlot({
 							target: graph,
@@ -77,6 +80,15 @@
 							}]
 						});
 					}
+					
+					function getTVI(func, xTarget) { //Returns 'Taux de Variation Instantané' formula. There's a better way to do this but took too much time to debug
+						let y1 = math.evaluate(latex_to_js(func), {x: xTarget});
+						let y2 = math.evaluate(latex_to_js(func), {x: xTarget + h});
+						
+						//let latexTVI = "\\frac{(" + func + "-" + h + ")-(" + func + ")}{" + h + "}"; // \frac{(fx-h)-(fx)}{h}
+						return (y2 - y1) / h;
+					}
+					
 					updateDimensions(); //Initialize graph
 				</script>
 			</div>

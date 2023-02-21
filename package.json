@@ -2,6 +2,7 @@
   "dependencies": {
     "bulma": "^0.9.4",
     "function-plot": "^1.23.2",
+    "mathjs": "^11.5.1",
     "mathquill": "^0.10.1-a"
   }
 }
