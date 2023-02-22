@@ -26,11 +26,11 @@
 			<h1>A peculiar Function Plotter.</h1>
 			<p>This function plotter hopefuly works! YIPPEE!</p>
 			<button class="button is-primary" type="button" onclick="refresh()">Visualize</button>
-
+			
 			<div class="box">
 				<h1>Formula</h1>
 				<p><span id="answer">x</span></p>
-				<p id="output"></p>
+				<input class="slider is-fullwidth" step="1" min="-10" max="10" value="0" type="range">
 			</div>
 
 			<div class="box" id="graphContainer">
@@ -83,16 +83,15 @@
 					
 					function getTVI(func, xTarget) { //Returns 'Taux de Variation Instantané' formula. There's a better way to do this but took too much time to debug
 						let y1 = math.evaluate(latex_to_js(func), {x: xTarget});
-						let y2 = math.evaluate(latex_to_js(func), {x: xTarget + h});
+						let y2minus = math.evaluate(latex_to_js(func), {x: xTarget + h});
 						
-						//let latexTVI = "\\frac{(" + func + "-" + h + ")-(" + func + ")}{" + h + "}"; // \frac{(fx-h)-(fx)}{h}
+						let y2plus
 						return (y2 - y1) / h;
 					}
 					
 					updateDimensions(); //Initialize graph
 				</script>
-			</div>
-
+			</div> 
 		</div>
 	</body>
 </html>
