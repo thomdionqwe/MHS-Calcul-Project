@@ -3,22 +3,24 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+		
 		<link rel="stylesheet" href="style.css"> <!-- Initialize style + Import Bulma / MathQuill -->
 		
 		<script src="node_modules\mathjs/lib/browser/math.js"></script> <!-- Initialize Math.js -->
-
+		
+		<script src="node_modules\bulma-slider\dist\js\bulma-slider.min.js"></script>
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> <!-- Initialize MathQuill -->
 		<script src="node_modules/mathquill/build/mathquill.js"></script>
-
+		
 		<script src="src\latex-to-js.js"></script> <!-- Initialize latex-to-js -->
-
+		
 		<script src="node_modules\function-plot\dist\function-plot.js"></script> <!-- Initialize function-plot -->
-
+		
 		<script>const MQ = MathQuill.getInterface(2);</script>
-
+		
 		<title>MHS Project</title>
-
+		
 	</head>
 
 	<body>
@@ -29,30 +31,49 @@
 			
 			<div class="box">
 				<h1>Formula</h1>
-				<p><span id="answer">x</span></p>
-				<input class="slider is-fullwidth" step="1" min="-10" max="10" value="0" type="range">
+				<p id="formulaText">Y=<span id="answer">x</span></p>
+				<input class="input" type="text" placeholder="TVI" id="TVIBox" onkeyup="updateTVI()">
 			</div>
-
+			
 			<div class="box" id="graphContainer">
 				<h1>Function Visualization</h1>
 				<span id="graph" class="graph"></span>
 				<script>
 					const graphContainer = document.getElementById("graphContainer");
 					const graph = document.getElementById("graph");
-					var h = 0.001;
-					addEventListener("resize", updateDimensions);
-					
+					const TVIBox = document.getElementById("TVIBox");
+					const formulaText = document.getElementById("formulaText");
 					var answerSpan = document.getElementById('answer');
+					var h = 0.001;
+					
+					addEventListener("resize", visualize);
+					
 					var answerMathField = MQ.MathField(answerSpan, {
 						handlers: {
 							edit: function() {
-								let func = answerMathField.latex(); // Get entered math in LaTeX format
-								visualize(func) //VISUALIZE!
+								visualize(); //VISUALIZE!
 							}
 						}
 					});
 					
-					function updateDimensions() { //Called when the window is resized. Is also called when the window is openned
+					function updateTVI() { //Called when the requested TVI is changed
+						let TVI = getTVI(answerMathField.latex(), TVIBox.value*1);
+						
+						if (TVI == false) { //Check if TVI exists
+							console.log("NO TVI! "+ TVIBox.value);
+							TVIBox.style.border = "1px solid #f14668";
+							TVIBox.style.background = "#fcf0f3";
+						} else {
+							TVIBox.style.border = null;
+							TVIBox.style.background = null;
+						}
+						
+					}
+					
+					function visualize() { //Takes LaTeX function and plots it to the graph
+						formulaText.style.color = null;
+						
+						try {
 						functionPlot({
 							target: graph,
 							width: graphContainer.offsetWidth - 50,
@@ -62,34 +83,37 @@
 								fn: latex_to_js(answerMathField.latex()) //VERY USEFUL, THANK YOU!
 							}]
 						});
-						console.log("updated dimensions")
+					}
+						catch(err) {
+							//console.log("Graphing error!");
+							formulaText.style.color = "#f14668";
+							return;
+						}
 					}
 					
-					function visualize(func) { //Takes LaTeX function and plots it to the graph
-						console.log(func);
-						console.log(latex_to_js(func));
-						console.log(getTVI(func, 1));
-						
-						functionPlot({
-							target: graph,
-							width: graphContainer.offsetWidth - 50,
-							height: (graphContainer.offsetWidth - 50) * 0.5625,
-							grid: true,
-							data: [{
-								fn: latex_to_js(func) //VERY USEFUL, THANK YOU!
-							}]
-						});
-					}
 					
 					function getTVI(func, xTarget) { //Returns 'Taux de Variation Instantané' formula. There's a better way to do this but took too much time to debug
-						let y1 = math.evaluate(latex_to_js(func), {x: xTarget});
-						let y2minus = math.evaluate(latex_to_js(func), {x: xTarget + h});
+						let y1;
+						let y2Plus;
+						let y2Minus;
 						
-						let y2plus
-						return (y2 - y1) / h;
+						try{
+							y1 = math.evaluate(latex_to_js(func), {x: xTarget});
+							y2Plus = math.evaluate(latex_to_js(func), {x: xTarget + h});
+							y2Minus = math.evaluate(latex_to_js(func), {x: xTarget - h});
+						}
+						catch { //latex_to_js error handling, its somewhat unreliable :(
+							return false;
+						}
+						
+						if (Math.round((y2Plus - y1) / h) != Math.round((y2Minus - y1) / -h)) { //If the tvi does not exist
+							return false;
+						}
+						
+						return Math.round((y2Plus - y1) / h);
 					}
 					
-					updateDimensions(); //Initialize graph
+					visualize(); //Initialize graph
 				</script>
 			</div> 
 		</div>
