@@ -17,25 +17,25 @@
 
 		<script>const MQ = MathQuill.getInterface(2);</script>
 
-		<title>MHS Project</title>
+		<title>Projet MHS</title>
 
 	</head>
 
 	<body>
 		<div class="content">
-			<h1>A peculiar Function Plotter.</h1>
-			<p>This function plotter hopefuly works! YIPPEE!</p>
+			<h1>Une calculatrice particulière.</h1>
+			<p>Visualizez et calculez le TVI d'une équation!</p>
 
 			<div class="box">
-				<h1>Formula</h1>
+				<h1>Formule</h1>
 				<p id="formulaText">Y=<span id="answer">x</span></p>
 				<input class="input" type="text" placeholder="TVI(x)" id="TVIBox" onkeyup="updateTVI()">
-				<p id="tviText">TVI at x = 1 is 1</p>
+				<p id="tviText">TVI à x = 1 estt 1</p>
 
 			</div>
 
 			<div class="box" id="graphContainer">
-				<h1>Function Visualization</h1>
+				<h1>Visualisation de la fonction</h1>
 				<span id="graph" class="graph"></span>
 				<script>
 					const graphContainer = document.getElementById("graphContainer");
@@ -65,7 +65,7 @@
 						} else {
 							TVIBox.style.border = null;
 							TVIBox.style.background = null;
-							TVIText.innerHTML = "TVI at x = " + TVIBox.value*1 + " is " + TVI;
+							TVIText.innerHTML = "TVI à x = " + TVIBox.value*1 + " est " + TVI;
 						}
 
 					}
@@ -116,8 +116,8 @@
 
 					visualize(); //Initialize graph
 				</script>
-			</div> 
-			<button class="button is-info" onclick="window.open('index_fr.html', '_self')">Français</button>
+			</div>
+			<button class="button is-info" onclick="window.open('index.html', '_self')">English</button>
 		</div>
 	</body>
 </html>
