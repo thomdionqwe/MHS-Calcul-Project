@@ -43,7 +43,7 @@
 					const TVIText = document.getElementById("tviText");
 					const formulaText = document.getElementById("formulaText");
 					var answerSpan = document.getElementById('answer');
-					var h = 0.0000000000000001;
+					var h = 0.0001;
 
 					addEventListener("resize", visualize);
 
@@ -73,8 +73,6 @@
 					function visualize() { //Takes LaTeX function and plots it to the graph
 						updateTVI();
 						
-						var jsfunc = latex_to_js(answerMathField.latex())
-						
 						formulaText.style.color = null;
 						try {
 							functionPlot({
@@ -83,9 +81,7 @@
 								height: (graphContainer.offsetWidth - 50) * 0.5625,
 								grid: true,
 								data: [{
-									fn: jsfunc //VERY USEFUL, THANK YOU!
-								},{
-									fn: math.evaluate( "f(" + TVI + ") = " + jsfunc )
+									fn: latex_to_js(answerMathField.latex()) //VERY USEFUL, THANK YOU!
 								}]
 							});
 						}
@@ -94,7 +90,6 @@
 							formulaText.style.color = "#f14668";
 							return;
 						}
-					console.log("f(" + TVI + ") = " + jsfunc );
 					}
 
 
